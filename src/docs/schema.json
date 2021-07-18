@@ -1,0 +1,195 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Cryptocurrency Dashboard",
+        "description": "Default",
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "description": "Local",
+            "url": "http://localhost:3000"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Coins"
+        },
+        {
+            "name": "Prices"
+        }
+    ],
+    "paths": {
+        "/coins/all": {
+            "get": {
+                "tags": ["Coins"],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "SPOT"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CoinsAllResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "apiSecret": [],
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
+        "/price/ticker": {
+            "get": {
+                "tags": ["Prices"],
+                "parameters": [
+                    {
+                        "name": "symbol",
+                        "in": "query",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "BTCUSDT"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PriceTickerResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CoinsAllResponse": {
+                "type": "object",
+                "properties": {
+                    "prices": {
+                        "type": "object",
+                        "properties": {
+                            "totalAssetUSD": {
+                                "type": "integer",
+                                "format": "float32",
+                                "example": 8.287127019273168
+                            },
+                            "coinPrices": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "asset": {
+                                            "type": "string",
+                                            "example": "BRL"
+                                        },
+                                        "price": {
+                                            "type": "integer",
+                                            "format": "float32",
+                                            "example": 4.953
+                                        },
+                                        "free": {
+                                            "type": "integer",
+                                            "format": "float32",
+                                            "example": 0.0744
+                                        },
+                                        "value": {
+                                            "type": "integer",
+                                            "format": "float32",
+                                            "example": 0.015021199273167776
+                                        },
+                                        "locked": {
+                                            "type": "integer",
+                                            "format": "int32",
+                                            "example": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "PriceTickerResponse": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "symbol": {
+                                "type": "string",
+                                "example": "BTCUSDT"
+                            },
+                            "price": {
+                                "type": "string",
+                                "example": "33397.86000000"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "apiKey": {
+                "type": "apiKey",
+                "name": "api-key",
+                "in": "header"
+            },
+            "apiSecret": {
+                "type": "apiKey",
+                "name": "api-secret",
+                "in": "header"
+            }
+        }
+    }
+}
